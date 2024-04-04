@@ -71,6 +71,8 @@
     @apply border-border;
   }
   body {
-    @apply font-comfortaa bg-background p-2 text-foreground;
+    @apply flex max-h-screen min-h-screen flex-col items-center justify-center  overflow-hidden bg-background p-2 font-comfortaa text-foreground;
+    scrollbar-color: var(--foreground) transparent;
+    scrollbar-width: thin;
   }
 }

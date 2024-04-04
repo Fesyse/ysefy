@@ -6,6 +6,8 @@ import {
 } from "next-auth"
 import { type Adapter } from "next-auth/adapters"
 import DiscordProvider from "next-auth/providers/discord"
+import GithubProvider from "next-auth/providers/github"
+import VkProvider from "next-auth/providers/vk"
 
 import { env } from "@/env"
 import { db } from "@/server/db"
@@ -37,6 +39,10 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  secret: env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "database",
+  },
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
@@ -55,6 +61,10 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
+    }),
+    GithubProvider({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
     /**
      * ...add more providers here.
