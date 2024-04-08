@@ -2,11 +2,13 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getSession } from "next-auth/react"
 
 export default async function middleware(req: NextRequest) {
-  // fixes the issue when assets not loading on client
-  if (req.nextUrl.pathname.startsWith("/_next")) {
-    return NextResponse.next()
-  }
+  const { origin, pathname } = req.nextUrl
 
+  // fixes the issue when are assets not loading
+  if (pathname.startsWith("/_next")) return NextResponse.next()
+
+  // DO NOT USE NEXT-AUTH!!!
+  // THIS IS ALL DAY WORTH OF SEARCHING FOR SOLUTION TO GET A USER SESSION
   const requestForNextAuth = {
     headers: {
       cookie: req.headers.get("cookie"),
@@ -14,19 +16,26 @@ export default async function middleware(req: NextRequest) {
   }
 
   // @ts-expect-error
-  // DO NOT USE NEXT-AUTH!!!
-  // THIS IS ALL DAY WORTH OF SEARCHING FOR SOLUTION TO GET A USER SESSION
   const isAuthenticated = !!(await getSession({ req: requestForNextAuth }))
 
-  const isAuthPage = req.nextUrl.pathname.startsWith("/auth")
+  const isAuthPage = pathname.startsWith("/auth")
+  const isRootPage = pathname === "/"
+
+  // if user is on root page then we are checking if he is authenticated, if so => redirecting them to app page, otherwise => redirecting them to auth page
+  if (isRootPage)
+    return NextResponse.redirect(
+      new URL(isAuthenticated ? "/app" : "/auth", origin),
+    )
 
   if (isAuthenticated && isAuthPage)
-    return NextResponse.redirect(new URL("/", req.nextUrl.origin))
+    // if user is on auth page & he is logged in => redirect them to app page
+    return NextResponse.redirect(new URL("/app", origin))
 
   if (!isAuthenticated && !isAuthPage) {
-    // the user is not logged in, redirect to the auth page
-    const signInUrl = new URL("/auth", req.nextUrl.origin)
+    // if user is not on auth page & he is not logged in => redirect them to auth page
+    const signInUrl = new URL("/auth", origin)
     signInUrl.searchParams.append("callbackUrl", req.url)
+
     return NextResponse.redirect(signInUrl)
   }
 
@@ -34,5 +43,5 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/auth:path*"],
+  matcher: ["/", "/app:path*", "/auth:path*"],
 }

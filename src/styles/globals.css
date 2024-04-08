@@ -28,8 +28,8 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
+    --border: 240 5.9% 80%;
+    --input: 240 5.9% 80%;
     --ring: 240 10% 3.9%;
 
     --radius: 0.5rem;
@@ -71,7 +71,7 @@
     @apply border-border;
   }
   body {
-    @apply flex max-h-screen min-h-screen flex-col items-center justify-center  overflow-hidden bg-background p-2 font-comfortaa text-foreground;
+    @apply max-h-screen min-h-screen overflow-hidden bg-background !p-4 font-comfortaa text-foreground;
     scrollbar-color: var(--foreground) transparent;
     scrollbar-width: thin;
   }

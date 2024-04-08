@@ -15,7 +15,7 @@ export const metadata = {
     template: "%s | YseFy",
   },
   description: "An chat app to hang out",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: "/favicon.ico",
 }
 
 export default function RootLayout({
