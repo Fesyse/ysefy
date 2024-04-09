@@ -11,7 +11,7 @@ import { Separator } from "@/app/_components/ui/separator"
 import { Input } from "@/app/_components/ui/input"
 import { ThemeToggle } from "../theme-toggle"
 import { ProfileForm } from "./profile/profile-form"
-import { signOut } from "next-auth/react"
+import { ConversationsList } from "./conversations-list"
 
 export const SideBar = () => {
   return (
@@ -60,7 +60,10 @@ export const SideBar = () => {
           <ThemeToggle />
         </SheetContent>
       </Sheet>
-      <Input name='search' type='text' placeholder='Search...' />
+      <div className='flex flex-col items-stretch'>
+        <Input name='search' type='text' placeholder='Search...' />
+        <ConversationsList />
+      </div>
     </aside>
   )
 }
