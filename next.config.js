@@ -16,6 +16,11 @@ const config = {
         hostname: "avatars.githubusercontent.com",
         pathname: "/u/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.discordapp.com",
+        pathname: "/avatars/**",
+      },
     ],
   },
 }

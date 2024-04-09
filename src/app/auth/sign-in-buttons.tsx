@@ -3,6 +3,7 @@
 import { DiscordLogoIcon, GitHubLogoIcon } from "@radix-ui/react-icons"
 import { Button } from "../_components/ui/button"
 import { signIn, signOut } from "next-auth/react"
+import { toast } from "sonner"
 
 export const SignInButtons = () => {
   return (
@@ -10,7 +11,10 @@ export const SignInButtons = () => {
       <Button
         variant='outline'
         className='flex h-16 gap-3'
-        onClick={() => signIn("github")}
+        onClick={async () => {
+          await signIn("github")
+          toast.success("Successfuly signed in!")
+        }}
       >
         <span className='text-xl font-medium'>Github</span>
         <GitHubLogoIcon className='h-10 w-10' />
@@ -18,12 +22,14 @@ export const SignInButtons = () => {
       <Button
         variant='outline'
         className='flex h-16 gap-3'
-        onClick={() => signIn("discord")}
+        onClick={async () => {
+          await signIn("discord")
+          toast.success("Successfuly signed in!")
+        }}
       >
         <span className='text-xl font-medium'>Discord</span>
         <DiscordLogoIcon className='h-10 w-10' />
       </Button>
-      <Button onClick={() => signOut()}>Sign out</Button>
     </div>
   )
 }

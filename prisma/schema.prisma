@@ -45,10 +45,12 @@ model User {
     id            String    @id @default(cuid())
     name          String
     email         String    @unique
-    emailVerified DateTime?
+    emailVerified DateTime? @map("email_verified")
     image         String
     accounts      Account[]
     sessions      Session[]
+
+    conversations Conversation[]
 }
 
 model VerificationToken {
@@ -57,4 +59,23 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Conversation {
+    id        String   @id() @default(cuid())
+    createdAt DateTime @default(now()) @map("created_at")
+
+    messages Message[]
+    users    User[]
+}
+
+model Message {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now()) @map("created_at")
+    userId    String   @map("user_id")
+
+    content String
+
+    conversations  Conversation @relation(fields: [conversationId], references: [id])
+    conversationId String       @map("conversation_id")
 }

@@ -11,6 +11,7 @@ import { Separator } from "@/app/_components/ui/separator"
 import { Input } from "@/app/_components/ui/input"
 import { ThemeToggle } from "../theme-toggle"
 import { ProfileForm } from "./profile/profile-form"
+import { signOut } from "next-auth/react"
 
 export const SideBar = () => {
   return (

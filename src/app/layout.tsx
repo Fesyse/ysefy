@@ -26,7 +26,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`font-sans ${comfortaa.className}`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className='m-4 flex h-screen w-full items-center justify-center overflow-hidden'>
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   )

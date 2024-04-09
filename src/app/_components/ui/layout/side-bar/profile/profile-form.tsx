@@ -14,9 +14,11 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form"
 import { Input } from "@/app/_components/ui/input"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { Loader } from "@/app/_components/ui/loader"
-import { api } from "@/trpc/server"
+import { api } from "@/trpc/react"
+import { toast } from "sonner"
+import { Separator } from "@/app/_components/ui/separator"
 
 export const formUpdateUserSchema = z.object({
   name: z
@@ -38,6 +40,7 @@ export const formUpdateUserSchema = z.object({
     ])
     .optional()
     .transform(e => (e === "" ? undefined : e)),
+  id: z.string().cuid(),
 })
 
 export type TUpdateUserForm = z.infer<typeof formUpdateUserSchema>
@@ -48,12 +51,14 @@ export const ProfileForm = () => {
 
   if (!user) return <Loader />
 
+  const { mutate: updateUserOnServer } = api.user.update.useMutation()
   const form = useForm<TUpdateUserForm>({
     mode: "onSubmit",
     resolver: zodResolver(formUpdateUserSchema),
     defaultValues: {
       name: user.name,
       email: user.email,
+      id: user.id,
     },
   })
 
@@ -61,9 +66,20 @@ export const ProfileForm = () => {
     <Form {...form}>
       <form
         className='grid gap-3'
-        onSubmit={form.handleSubmit(async (newRawUser: TUpdateUserForm) => {
-          const newUser = await api.user.update({ ...newRawUser, id: user.id })
-          await updateUser({ name: newUser.name, email: newUser.email })
+        onSubmit={form.handleSubmit((newRawUser: TUpdateUserForm) => {
+          updateUserOnServer(
+            { ...newRawUser, id: user.id },
+            {
+              onSuccess: newUser => {
+                toast.success("Successfully updated your profile!")
+                console.log(newUser)
+              },
+              onError: () =>
+                toast.error(
+                  "Failed to update your profile. Please try again later.",
+                ),
+            },
+          )
         })}
       >
         <FormField
@@ -93,6 +109,17 @@ export const ProfileForm = () => {
           )}
         />
         <Button type='submit'>Save changes</Button>
+        <Separator className='my-2' />
+        <Button
+          variant='secondary'
+          type='button'
+          onClick={async () => {
+            await signOut()
+            toast.success("Successfully signed out!")
+          }}
+        >
+          Sign out
+        </Button>
       </form>
     </Form>
   )
