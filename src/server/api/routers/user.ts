@@ -1,4 +1,4 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc"
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
 import { z } from "zod"
 
 export const formUpdateUserSchema = z.object({
@@ -25,11 +25,23 @@ export const formUpdateUserSchema = z.object({
 })
 
 export const userRouter = createTRPCRouter({
-  update: publicProcedure.input(formUpdateUserSchema).mutation(
+  update: protectedProcedure.input(formUpdateUserSchema).mutation(
     async ({ ctx, input }) =>
       await ctx.db.user.update({
         where: { id: input.id },
         data: input,
       }),
   ),
+  findManyBySubstring: protectedProcedure
+    .input(z.object({ substring: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const users = await ctx.db.user.findMany({
+        where: {
+          name: {
+            contains: input.substring,
+          },
+        },
+      })
+      return users.filter(user => user.id !== ctx.session.user.id)
+    }),
 })

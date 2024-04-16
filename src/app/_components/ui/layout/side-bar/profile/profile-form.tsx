@@ -72,7 +72,6 @@ export const ProfileForm = () => {
             {
               onSuccess: newUser => {
                 toast.success("Successfully updated your profile!")
-                console.log(newUser)
               },
               onError: () =>
                 toast.error(

@@ -5,8 +5,10 @@ export const conversationsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.conversation.findMany({
       where: {
-        usersIds: {
-          has: ctx.session.user.id,
+        users: {
+          some: {
+            id: ctx.session.user.id,
+          },
         },
       },
       include: {
@@ -15,12 +17,34 @@ export const conversationsRouter = createTRPCRouter({
     })
   }),
   create: protectedProcedure
-    .input(z.object({ usersIds: z.array(z.string().cuid()) }))
-    .mutation(async ({ ctx, input: { usersIds } }) => {
-      return await ctx.db.conversation.create({
+    .input(
+      z.object({
+        name: z.string(),
+        usersIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ ctx, input: { name, usersIds } }) => {
+      const newConversation = await ctx.db.conversation.create({
         data: {
-          usersIds,
+          name,
         },
       })
+
+      await ctx.db.$transaction(
+        usersIds.map(id =>
+          ctx.db.user.update({
+            where: { id },
+            data: {
+              conversations: {
+                connect: {
+                  id: newConversation.id,
+                },
+              },
+            },
+          }),
+        ),
+      )
+
+      return newConversation
     }),
 })

@@ -1,11 +1,11 @@
-import type { FC, PropsWithChildren } from "react";
-import { Toaster } from "sonner";
+import type { FC, PropsWithChildren } from "react"
+import { Toaster } from "sonner"
 
 export const ToastProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       {children}
-      <Toaster position="bottom-center" />
+      <Toaster position='top-center' />
     </>
-  );
-};
+  )
+}
