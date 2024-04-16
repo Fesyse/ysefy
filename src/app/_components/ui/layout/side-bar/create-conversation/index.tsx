@@ -11,14 +11,12 @@ import {
 import { Button } from "@/app/_components/ui/button"
 import { Users2 } from "lucide-react"
 import { useEffect, useState } from "react"
-import { GroupNameForm } from "./group-name-form"
+import { GroupGeneralForm } from "./group-general-form"
 import { GroupUsersForm } from "./group-users-form"
 import { AnimatePresence } from "framer-motion"
-import { type Session } from "next-auth"
 import { api } from "@/trpc/react"
 import { useSession } from "next-auth/react"
 import { useCreateConversationDialogStore } from "@/stores/create-conversation-dialog.store"
-import { revalidatePath } from "next/cache"
 import { revalidatePathAction } from "@/actions/revalidate-path"
 
 export const CreateConversation = () => {
@@ -28,7 +26,8 @@ export const CreateConversation = () => {
   const [newGroupData, setNewGroupData] = useState<{
     name: string
     usersIds: string[]
-  }>({ name: "", usersIds: [] })
+    imageUrl: string
+  }>({ name: "", usersIds: [], imageUrl: "" })
   const { mutate: createConversation } = api.conversations.create.useMutation()
   const { data: session } = useSession()
   const { isDialogOpen, setIsDialogOpen } = useCreateConversationDialogStore()
@@ -44,6 +43,7 @@ export const CreateConversation = () => {
     createConversation({
       name: newGroupData.name,
       usersIds: [session.user.id, ...newGroupData.usersIds],
+      imageUrl: newGroupData.imageUrl,
     })
     setCurrentTab("groupName")
     setIsDialogOpen(false)
@@ -87,7 +87,7 @@ export const CreateConversation = () => {
         <div className='overflow-hidden'>
           <AnimatePresence>
             {currentTab === "groupName" ? (
-              <GroupNameForm {...formProps} />
+              <GroupGeneralForm {...formProps} />
             ) : (
               <GroupUsersForm {...formProps} />
             )}

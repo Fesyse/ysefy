@@ -11,9 +11,6 @@ export const conversationsRouter = createTRPCRouter({
           },
         },
       },
-      include: {
-        messages: true,
-      },
     })
   }),
   create: protectedProcedure
@@ -21,12 +18,14 @@ export const conversationsRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         usersIds: z.array(z.string()),
+        imageUrl: z.string().url(),
       }),
     )
-    .mutation(async ({ ctx, input: { name, usersIds } }) => {
+    .mutation(async ({ ctx, input: { name, usersIds, imageUrl } }) => {
       const newConversation = await ctx.db.conversation.create({
         data: {
           name,
+          imageUrl,
         },
       })
 

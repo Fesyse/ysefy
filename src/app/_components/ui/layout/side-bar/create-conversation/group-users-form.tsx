@@ -8,7 +8,7 @@ import {
 import { useForm } from "react-hook-form"
 import { Button } from "@/app/_components/ui/button"
 import { useCallback, useEffect, useRef, useState, type FC } from "react"
-import { type TGroupFormsProps } from "./group-name-form"
+import { type TGroupFormProps } from "./group-general-form"
 import { ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
 import MultiSelectFormField, {
@@ -25,7 +25,7 @@ const formSchema = z.object({
   usersIds: z.array(z.string()).min(1),
 })
 
-export const GroupUsersForm: FC<TGroupFormsProps> = ({
+export const GroupUsersForm: FC<TGroupFormProps> = ({
   newGroupData,
   setCurrentTab,
   setNewGroupData,

@@ -2,6 +2,7 @@ import { z } from "zod"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,41 +14,45 @@ import { Input } from "@/app/_components/ui/input"
 import { Button } from "@/app/_components/ui/button"
 import { useEffect, useRef, type FC } from "react"
 import { motion } from "framer-motion"
-import { type Session } from "next-auth"
 import { useCreateConversationDialogStore } from "@/stores/create-conversation-dialog.store"
+import { UploadDropzone } from "@/app/_components/ui/upload-dropzone"
+import { toast } from "sonner"
 
-const formGroupNameSchema = z.object({
+const formGroupSchema = z.object({
   name: z
     .string()
     .min(3, "Group name is too short.")
     .max(18, "Group name is too long."),
+  imageUrl: z.string().url(),
 })
 
-type TGroupNameForm = z.infer<typeof formGroupNameSchema>
+type TGroupNameForm = z.infer<typeof formGroupSchema>
 
-export type TGroupFormsProps = {
+export type TGroupFormProps = {
   setCurrentTab: React.Dispatch<React.SetStateAction<"groupName" | "userList">>
   newGroupData: {
     name: string
     usersIds: string[]
+    imageUrl: string
   }
   setNewGroupData: React.Dispatch<
     React.SetStateAction<{
       name: string
       usersIds: string[]
+      imageUrl: string
     }>
   >
 }
 
-export const GroupNameForm: FC<TGroupFormsProps> = ({
+export const GroupGeneralForm: FC<TGroupFormProps> = ({
   setNewGroupData,
   setCurrentTab,
   newGroupData,
 }) => {
   const form = useForm<TGroupNameForm>({
     mode: "onSubmit",
-    defaultValues: { name: newGroupData.name },
-    resolver: zodResolver(formGroupNameSchema),
+    defaultValues: { name: newGroupData.name, imageUrl: newGroupData.imageUrl },
+    resolver: zodResolver(formGroupSchema),
   })
 
   const { groupNameHeight, userListHeight, setGroupNameHeight } =
@@ -91,7 +96,11 @@ export const GroupNameForm: FC<TGroupFormsProps> = ({
           ref={formRef}
           className='flex flex-col gap-5'
           onSubmit={form.handleSubmit(data => {
-            setNewGroupData(prev => ({ ...prev, name: data.name }))
+            setNewGroupData(prev => ({
+              ...prev,
+              name: data.name,
+              imageUrl: data.imageUrl,
+            }))
             setCurrentTab("userList")
           })}
         >
@@ -108,10 +117,39 @@ export const GroupNameForm: FC<TGroupFormsProps> = ({
                     {...field}
                   />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name='imageUrl'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Group image</FormLabel>
+                <FormControl>
+                  <UploadDropzone
+                    endpoint='conversationImageUploader'
+                    onClientUploadComplete={file => {
+                      toast.success("Group image uploaded successfully.")
+                      field.onChange(file[0]?.url)
+                    }}
+                    onUploadError={(error: Error) => {
+                      toast.error(
+                        "Failed uploading group image. Please try again later.",
+                        { description: `Error: ${error.message}` },
+                      )
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormDescription>
+            Choose your group name and avatar for it.
+          </FormDescription>
           <Button className='mt-auto' type='submit'>
             Next
           </Button>
