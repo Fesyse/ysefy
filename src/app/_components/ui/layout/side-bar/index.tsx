@@ -12,30 +12,32 @@ import { CreateConversation } from "./create-conversation"
 export const SideBar = () => {
   return (
     <aside className='flex justify-center gap-2'>
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button
-            size='icon'
-            variant='outline'
-            className='flex items-center justify-center p-1'
-          >
-            <Menu size={36} />
-          </Button>
-        </SheetTrigger>
-        <SheetContent
-          closeButton={true}
-          className='flex w-48 flex-col  p-4'
-          side='left'
-        >
-          <Profile />
-          <Separator />
-          <CreateConversation />
-          <Settings />
-          <ThemeToggle />
-        </SheetContent>
-      </Sheet>
-      <div className='flex flex-col items-stretch'>
-        <Input name='search' type='text' placeholder='Search...' />
+      <div className='flex flex-col'>
+        <div className='flex gap-3'>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                size='icon'
+                variant='outline'
+                className='flex items-center justify-center p-1'
+              >
+                <Menu size={36} />
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              closeButton={true}
+              className='flex w-48 flex-col  p-4'
+              side='left'
+            >
+              <Profile />
+              <Separator />
+              <CreateConversation />
+              <Settings />
+              <ThemeToggle />
+            </SheetContent>
+          </Sheet>
+          <Input name='search' type='text' placeholder='Search...' />
+        </div>
         <ConversationsList />
       </div>
     </aside>

@@ -4,9 +4,11 @@ import { Separator } from "@/app/_components/ui/separator"
 
 export default function Page({ children }: { children: ReactNode }) {
   return (
-    <main className='flex min-h-screen w-full gap-4'>
-      <SideBar />
-      <Separator orientation='vertical' className='h-[calc(100vh-1rem*2)]' />
+    <main className='grid min-h-screen w-full grid-cols-[15rem_1fr] gap-4'>
+      <div className='flex gap-4'>
+        <SideBar />
+        <Separator orientation='vertical' className='h-[calc(100vh-1rem*2)]' />
+      </div>
       {children}
     </main>
   )

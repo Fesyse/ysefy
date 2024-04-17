@@ -9,7 +9,9 @@ const comfortaa = Comfortaa({
   variable: "--font-comfortaa",
 })
 
-export const metadata = {
+const comfortaaVariable = comfortaa.variable
+
+const metadata = {
   title: {
     default: "YseFy",
     template: "%s | YseFy",
@@ -35,3 +37,5 @@ export default function RootLayout({
     </html>
   )
 }
+
+export { metadata, comfortaaVariable }
