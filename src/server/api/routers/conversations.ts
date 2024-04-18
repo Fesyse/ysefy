@@ -2,6 +2,18 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
 import { z } from "zod"
 
 export const conversationsRouter = createTRPCRouter({
+  getById: protectedProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.conversation.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          _count: true,
+        },
+      })
+    }),
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.conversation.findMany({
       where: {
@@ -26,6 +38,7 @@ export const conversationsRouter = createTRPCRouter({
         data: {
           name,
           imageUrl,
+          ownerId: ctx.session.user.id,
         },
       })
 

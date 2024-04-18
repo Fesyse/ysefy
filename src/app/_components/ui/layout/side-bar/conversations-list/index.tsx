@@ -17,18 +17,6 @@ export const ConversationsList = async () => {
           ...conversations,
           ...conversations,
           ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
         ].map(conversation => (
           <div key={conversation.id}>
             <Conversation conversation={conversation} key={conversation.id} />

@@ -12,7 +12,7 @@ export const Conversation: FC<TConversationProps> = ({ conversation }) => {
   return (
     <Link href={`/app/${conversation.id}`} className='flex items-center'>
       <Image
-        className='h-12 w-12 overflow-hidden rounded-full object-cover object-center'
+        className='h-12 w-12 overflow-hidden rounded-full border border-solid border-border object-cover object-center'
         width={48}
         height={48}
         src={conversation.imageUrl}

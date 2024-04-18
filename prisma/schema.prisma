@@ -69,6 +69,8 @@ model Conversation {
     name     String
     messages Message[]
 
+    ownerId String @map("owner_id")
+
     users User[]
 }
 
