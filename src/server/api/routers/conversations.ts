@@ -14,6 +14,23 @@ export const conversationsRouter = createTRPCRouter({
         },
       })
     }),
+  isHaveAccessToConversation: protectedProcedure
+    .input(z.object({ conversationId: z.string().cuid() }))
+    .query(async ({ ctx, input }) => {
+      const conversation = await ctx.db.conversation.findUnique({
+        where: {
+          users: {
+            some: {
+              id: ctx.session.user.id,
+            },
+          },
+
+          id: input.conversationId,
+        },
+        include: { _count: true, users: true },
+      })
+      return !conversation ? null : conversation
+    }),
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.conversation.findMany({
       where: {
