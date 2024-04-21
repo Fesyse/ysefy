@@ -72,7 +72,7 @@ export const ConversationHeader: FC<{
           <ScrollArea className='max-h-60'>
             <div className='flex flex-col gap-2'>
               {conversation.users.map(user => (
-                <User user={user} />
+                <User key={user.id} user={user} />
               ))}
             </div>
           </ScrollArea>
