@@ -1,6 +1,6 @@
 # YseFy
 
-An chat app to hang out with your friends, family and colleagues.
+A chat app to hang out with your friends, family and colleagues.
 
 ## Create T3 App
 
