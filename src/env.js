@@ -7,6 +7,11 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
+    PUSHER_APP_ID: z.string(),
+    PUSHER_KEY: z.string(),
+    PUSHER_SECRET: z.string(),
+    PUSHER_CLUSTER: z.string(),
+    VERCEL_URL: z.string().url().optional(),
     DATABASE_URL: z
       .string()
       .url()
@@ -50,6 +55,11 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    PUSHER_APP_ID: process.env.PUSHER_APP_ID,
+    PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
+    PUSHER_SECRET: process.env.PUSHER_APP_SECRET,
+    PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER,
+    VERCEL_URL: process.env.VERCEL_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
     UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,

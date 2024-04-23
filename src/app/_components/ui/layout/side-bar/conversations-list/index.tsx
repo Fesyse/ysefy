@@ -1,5 +1,5 @@
 import { api } from "@/trpc/server"
-import { Conversation } from "./conversation"
+import { ConversationBox } from "./conversation-box"
 import { ScrollArea } from "@/app/_components/ui/scroll-area"
 
 export const ConversationsList = async () => {
@@ -8,19 +8,8 @@ export const ConversationsList = async () => {
   return (
     <ScrollArea className='my-4 h-[calc(100vh-5rem)]'>
       <div className='grid gap-4'>
-        {[
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-          ...conversations,
-        ].map(conversation => (
-          <div key={conversation.id}>
-            <Conversation conversation={conversation} key={conversation.id} />
-          </div>
+        {conversations.map(conversation => (
+          <ConversationBox conversation={conversation} key={conversation.id} />
         ))}
       </div>
     </ScrollArea>

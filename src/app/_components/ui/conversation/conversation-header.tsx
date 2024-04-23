@@ -32,7 +32,7 @@ export const ConversationHeader: FC<{
               src={conversation.imageUrl}
               alt={conversation.name}
             />
-            <div className='ml-2'>
+            <div className='ml-2 text-left'>
               <p
                 className={cn(
                   "font-comfortaa text-lg font-semibold",
@@ -41,7 +41,7 @@ export const ConversationHeader: FC<{
               >
                 {conversation.name}
               </p>
-              <p className='text-left font-comfortaa text-sm opacity-65'>
+              <p className='font-comfortaa text-sm opacity-65'>
                 {conversation._count.users} member's
               </p>
             </div>
