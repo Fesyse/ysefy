@@ -1,30 +1,49 @@
-import { type Message } from "@/interfaces/message.interface"
-import { pusherClient } from "@/server/pusher"
-import { useEffect, useState, type FC } from "react"
+import { type MessageWithUser } from "@/interfaces/message.interface"
+import { pusherClient } from "@/server/pusher-client"
+import { useCallback, useEffect, useRef, type FC } from "react"
+import { Message } from "./message"
+import { removeDublicatesFromMessages } from "@/utils/remove-dublicates-from-messages"
 
 type TMessagesProps = {
-  initialMessages: Message[]
   conversationId: string
+  messages: MessageWithUser[]
+  setMessages: React.Dispatch<React.SetStateAction<MessageWithUser[]>>
 }
 
 export const Messages: FC<TMessagesProps> = ({
-  initialMessages,
   conversationId,
+  messages,
+  setMessages,
 }) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages)
+  const playMessageNotificationSound = useCallback(() => {
+    const audio = new Audio("/new-message-notification.wav")
+    audio.play()
+  }, [])
 
+  // subscribe to new messages
   useEffect(() => {
-    const event = `conversation:${conversationId}`
-    pusherClient.subscribe(event)
+    pusherClient.unsubscribe(conversationId)
+    pusherClient.subscribe(conversationId)
 
-    pusherClient.bind("add-message", (data: Message) => {
-      setMessages(prev => [...prev, data])
+    pusherClient.bind("new-message", (data: MessageWithUser) => {
+      playMessageNotificationSound()
+      setMessages(prev => removeDublicatesFromMessages([...prev, data]))
     })
 
     return () => {
-      pusherClient.unsubscribe(event)
+      pusherClient.unsubscribe(conversationId)
     }
   }, [])
 
-  return <div>Messages</div>
+  return (
+    <ul className='flex flex-col gap-3'>
+      {messages.map((message, i) => (
+        <Message
+          isSameUserAsBefore={messages[i - 1]?.userId === message.userId}
+          message={message}
+          key={message.id}
+        />
+      ))}
+    </ul>
+  )
 }

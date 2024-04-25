@@ -11,7 +11,7 @@ export const User: FC<{
   }
 }> = ({ user }) => {
   return (
-    <div className='flex items-center gap-1.5'>
+    <li className='flex items-center gap-1.5'>
       <Image
         className='overflow-hidden rounded-full border border-solid border-border object-cover object-center p-0.5'
         src={user.image}
@@ -23,6 +23,6 @@ export const User: FC<{
         <p className='max-w-36 truncate text-sm'>{user.name}</p>
         <p className='max-w-36 truncate text-xs opacity-50'>{user.email}</p>
       </div>
-    </div>
+    </li>
   )
 }

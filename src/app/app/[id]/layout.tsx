@@ -1,4 +1,4 @@
-import { ConversationHeader } from "@/app/_components/ui/conversation/conversation-header"
+import { ConversationHeader } from "@/app/_components/ui/conversation/header"
 import type {
   ConversationWithCount,
   ConversationWithUsers,
@@ -32,7 +32,7 @@ export default async function Page({
   }
 
   return (
-    <div>
+    <div className='h-[calc(100vh-4rem*1.5)] pr-8'>
       <ConversationHeader conversation={conversation} id={params.id} />
       {children}
     </div>

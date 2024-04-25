@@ -5,3 +5,13 @@ export interface Message {
   content: string
   conversationId: string
 }
+
+export interface MessageWithUser extends Message {
+  user: {
+    id: string
+    name: string
+    email: string
+    emailVerified: Date | null
+    image: string
+  }
+}

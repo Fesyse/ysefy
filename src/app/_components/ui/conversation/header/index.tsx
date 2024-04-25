@@ -70,11 +70,11 @@ export const ConversationHeader: FC<{
           </div>
 
           <ScrollArea className='max-h-60'>
-            <div className='flex flex-col gap-2'>
+            <ul className='flex flex-col gap-2'>
               {conversation.users.map(user => (
                 <User key={user.id} user={user} />
               ))}
-            </div>
+            </ul>
           </ScrollArea>
         </DialogContent>
       </Dialog>

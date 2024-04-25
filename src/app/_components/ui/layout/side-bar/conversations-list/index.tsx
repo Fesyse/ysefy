@@ -7,11 +7,11 @@ export const ConversationsList = async () => {
 
   return (
     <ScrollArea className='my-4 h-[calc(100vh-5rem)]'>
-      <div className='grid gap-4'>
+      <ul className='grid gap-4'>
         {conversations.map(conversation => (
           <ConversationBox conversation={conversation} key={conversation.id} />
         ))}
-      </div>
+      </ul>
     </ScrollArea>
   )
 }
